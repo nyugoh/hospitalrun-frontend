@@ -1,6 +1,6 @@
 <header class="sidebar-nav-header">
   <a class="sidebar-nav-logo" href="#">
-    {{partial "components/logo-svg"}}
+    {{partial "components/logo-hr"}}
   </a>
   <a href="#" class="settings-trigger {{if isShowingSettings 'active'}}" {{action 'toggleSettings'}}>
     <span class="mega-octicon octicon-gear"></span>
@@ -8,6 +8,7 @@
 
   {{#if isShowingSettings }}
     <nav class="settings-nav">
+      <a>{{t "navigation.messages.userRole"}}<br><b> {{role}} </b></a>
       {{#if session.isAuthenticated}}
         <a href="#" class="logout" {{ action 'invalidateSession' }}>{{t "navigation.actions.logout"}}</a>
       {{else}}

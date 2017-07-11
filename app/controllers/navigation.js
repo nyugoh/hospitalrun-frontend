@@ -16,6 +16,7 @@ export default Ember.Controller.extend(HospitalRunVersion, ModalHelper, Progress
   session: Ember.inject.service(),
   syncStatus: '',
   currentOpenNav: null,
+  role: '',
 
   actions: {
     about() {
@@ -66,6 +67,9 @@ export default Ember.Controller.extend(HospitalRunVersion, ModalHelper, Progress
 
     toggleSettings() {
       this.toggleProperty('isShowingSettings');
+      let session = this.get('session');
+      let userRole = session.get('data.authenticated.role');
+      this.set('role', userRole);
     },
 
     closeSettings() {
