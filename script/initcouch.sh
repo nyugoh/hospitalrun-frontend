@@ -1,12 +1,12 @@
 #!/bin/bash
 
-URL="localhost"
+URL="192.168.0.138"
 PORT="5984"
 
 if [ -z "${1}" ] || [ -z "${2}" ]; then
     HOST="http://$URL:$PORT"
     curl -X PUT $HOST/_config/admins/couchadmin -d '"test"'
-    SECUREHOST="http://couchadmin:test@$URL:$PORT"
+    SECUREHOST="http://Joe:root@$URL:$PORT"
 else
     SECUREHOST="http://$1:$2@$URL:$PORT"
 fi
