@@ -1,7 +1,7 @@
 var swEnvironment = {};
 importScripts('sw-toolbox-51b82446623c8f21b164b3de0175ec6e.js');
 var CACHE_PREFIX = 'brocsw-v';
-var CACHE_VERSION = CACHE_PREFIX+'1495081147743';
+var CACHE_VERSION = CACHE_PREFIX+'1500027345077';
 toolbox.options.cache.name = CACHE_VERSION;
 var urlsToPrefetch = [
     '/',
@@ -33,10 +33,11 @@ var urlsToPrefetch = [
     "assets/fonts/octicons.svg",
     "assets/fonts/octicons.ttf",
     "assets/fonts/octicons.woff",
-    "assets/hospitalrun-9367b8649869b5c56fc0452e0fcc3b68.css",
-    "assets/hospitalrun-d598b2e53c5a773d81dea7aa5b68b2b9.js",
+    "assets/hospitalrun-78534e720a07d1c0e9e7023fdf70457e.css",
+    "assets/hospitalrun-9579be632e279ea01cf1b78c2745c0f8.js",
+    "assets/images/seth-doyle-78210-9152418d34e5e734a1a7072fbed45594.jpg",
     "assets/vendor-7ea4554a73f88bc06f973eec3a85f1ba.css",
-    "assets/vendor-d8042eae6c7c66fd59f343eb1b260d51.js",
+    "assets/vendor-ebfe4ab20cfdcfbd5dbfcf28241870d0.js",
     "crossdomain.xml",
     "dymo/BarcodeAsImage.label",
     "favicon.ico",

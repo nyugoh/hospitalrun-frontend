@@ -4,5 +4,5 @@
 var express = require('express');
 
 module.exports = function(app) {
-  app.use(express.static(__dirname + '/prod'));
+  app.use(express.static(__dirname + '/dist'));
 };

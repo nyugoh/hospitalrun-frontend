@@ -1,17 +1,18 @@
-#sign-btn{
+.sign-btn {
   background-color: $loginbtn;
   color: $white;
 }
-.login-page{
+
+.login-page {
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
-  width:100%;
-  height:100%;
   background-image: url('images/seth-doyle-78210.jpg');
-  background-position: center;
   background-repeat: none;
+  background-position: center;
   background-size: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .signin-logo {

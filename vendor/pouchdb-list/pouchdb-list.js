@@ -2175,7 +2175,7 @@ module.exports = function (Buffer, Hash) {
     if(!(this instanceof Sha1)) return new Sha1()
     this._w = W
     Hash.call(this, 16*4, 14*4)
-  
+
     this._h = null
     this.init()
   }
@@ -3567,7 +3567,7 @@ function actuallyBuildRequestObject(path, info, userCtx, uuid, options) {
     cookie: {},
     form: {},
     headers: {
-      "Host": "localhost:5984",
+      "Host": "192.168.0.138:5984",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       "Accept-Language": buildAcceptLanguage(),
       "User-Agent": buildUserAgent()
@@ -3575,7 +3575,7 @@ function actuallyBuildRequestObject(path, info, userCtx, uuid, options) {
     info: info,
     method: "GET",
     path: path.slice(0),
-    peer: "127.0.0.1",
+    peer: "192.168.0.138",
     query: {},
     requested_path: path.slice(0),
     raw_path: "/" + path.join("/"),
@@ -4090,7 +4090,7 @@ module.exports = function all(iterable) {
   var resolved = 0;
   var i = -1;
   var promise = new Promise(INTERNAL);
-  
+
   while (++i < len) {
     allResolver(iterable[i], i);
   }
@@ -4194,7 +4194,7 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
   }
   var promise = new Promise(INTERNAL);
 
-  
+
   if (this.state !== states.PENDING) {
     var resolver = this.state === states.FULFILLED ? onFulfilled: onRejected;
     unwrap(promise, resolver, this.outcome);
@@ -4307,7 +4307,7 @@ function safelyResolveThenable(self, thenable) {
   function tryToUnwrap() {
     thenable(onSuccess, onError);
   }
-  
+
   var result = tryCatch(tryToUnwrap);
   if (result.status === 'error') {
     onError(result.value);
@@ -4943,7 +4943,7 @@ module.exports = function httpQuery(db, req) {
     //strips the database from the requested_path
     var relativeUrl = req.requested_path.slice(1).join("/");
     var url = db.getUrl() + relativeUrl;
-      
+
     var xhr;
     if (db.__opts && db.__opts.ajax && db.__opts.ajax.xhr) {
         xhr = new db.__opts.ajax.xhr();

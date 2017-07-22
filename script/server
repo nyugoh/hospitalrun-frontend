@@ -8,7 +8,7 @@ warn () {
 }
 
 check_couchdb () {
-  local server=${COUCHDB_URL:-'http://localhost:5984'}
+  local server=${COUCHDB_URL:-'http://192.168.0.138:5984'}
   curl -s -i ${server} | grep OK > /dev/null
 }
 

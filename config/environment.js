@@ -25,11 +25,11 @@ module.exports = function(environment) {
   };
 
   ENV.contentSecurityPolicy = {
-    'connect-src': "'self'",
-    'default-src': "'self'",
+    'connect-src': "'self' 192.168.0.138",
+    'default-src': "'self' 192.168.0.138",
     'frame-src': "'self'",
     'img-src': "'self' filesystem: data: blob:",
-    'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
+    'script-src': "'self' 'unsafe-inline' 'unsafe-eval' 192.168.0.138:49152 192.168.0.138:49152",
     'style-src': "'self' 'unsafe-inline'"
   };
 

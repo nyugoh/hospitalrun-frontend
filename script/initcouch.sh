@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL="192.168.0.138"
+URL="localhost"
 PORT="5984"
 
 if [ -z "${1}" ] || [ -z "${2}" ]; then
