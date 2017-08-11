@@ -11,11 +11,9 @@
       <a>{{t "navigation.messages.userRole"}}<br><b> {{role}} </b></a>
       {{#if session.isAuthenticated}}
         <a href="#" class="logout" {{ action 'invalidateSession' }}>{{t "navigation.actions.logout"}}</a>
-      {{language-select onFinish=(action 'toggleSettings')}}
       {{else}}
         {{#link-to 'login'}}{{t "navigation.actions.login"}}{{/link-to}}
       {{/if}}
-      <a href="#" {{ action 'about' }}>{{t "navigation.about"}}</a>
     </nav>
   {{/if}}
 </header>

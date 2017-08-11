@@ -2,15 +2,18 @@
   <div class="view-top-bar">
     <h1 class="view-current-title">{{t "dashboard.title" }}</h1>
   </div>
-  {{#if standAlone }}
+    {{#if standAlone}}
+        <div class="panel-body">
+            {{t "dashboard.standalone_welcome" }}
+            {{#if needsUserSetup }}
+                <p>{{t "dashboard.needs_user_setup"}}</p>
+                <button type="button" class="btn btn-primary align-left" {{action "newUser" }}>
+                    <span class="octicon octicon-plus"></span> {{t 'buttons.newUser'}}
+                </button>
+            {{/if}}
+        </div>
+    {{/if}}
     <div class="panel-body">
-      {{t "dashboard.standalone_welcome" }}
-      {{#if needsUserSetup }}
-        <p>{{t "dashboard.needs_user_setup"}}</p>
-        <button type="button" class="btn btn-primary align-left" {{action "newUser" }}>
-          <span class="octicon octicon-plus"></span> {{t 'buttons.newUser'}}
-        </button>
-      {{/if}}
+        {{t "dashboard.standalone_welcome" }}
     </div>
-  {{/if}}
 </section>

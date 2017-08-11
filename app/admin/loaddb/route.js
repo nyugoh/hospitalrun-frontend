@@ -6,7 +6,7 @@ import UserSession from 'hospitalrun/mixins/user-session';
 const { get, inject } = Ember;
 
 export default AbstractEditRoute.extend(UserSession, {
-  hideNewButton: true,
+  hideNewButton: false,
   editTitle: t('admin.loaddb.editTitle'),
 
   database: inject.service(),

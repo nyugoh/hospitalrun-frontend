@@ -305,21 +305,21 @@ export default {
       createInvoice: 'Create an invoice?'
     },
     labels: {
-      actualCharges: 'Actual Charges',
+      actualCharges: 'Charges',
       discountAmount: 'Discount Amount',
       discountPercentage: 'Discount Percentage',
       externalInvoiceNumber: 'External Invoice #',
-      hmoCom: 'HMO/COM',
-      insurance: 'National Insurance',
+      hmoCom: 'Insurance',
+      insurance: 'NHIF',
       paymentProfile: 'Payment Profile',
-      paymentsDeposits: 'Payments/Deposits',
+      paymentsDeposits: 'Payments made',
       pricingPanelOverrides: 'Pricing profile overrides',
       pricingProfile: 'Pricing Profile',
       setFee: 'Set Fee'
     },
     messages: {
-      flatFeeMsg: 'There is a flat fee for patient financial responsibility of {{currency}}{{setFee}}.',
-      flatDiscountMsg: 'There is a flat discount amount applied to the patient financial responsibility of {{currency}}{{discountAmount}}.'
+      flatFeeMsg: 'There is a flat fee for patient financial responsibility of {{currency}} {{setFee}}.',
+      flatDiscountMsg: 'There is a flat discount amount applied to the patient financial responsibility of {{currency}} {{discountAmount}}.'
     }
   },
   buttons: {
@@ -420,7 +420,7 @@ export default {
   },
   dashboard: {
     needs_user_setup: 'We recommend that you setup a User account.',
-    standalone_welcome: '<h4>Thanks for downloading Hospitali Plus</h4><p>You are running Hospitali Plus in stand alone mode. This mode allows you to support multiple users on a single, desktop/laptop instance of Hospitali Plus. This is ideal for:</p><ul><li>Evaluating Hospitali Plus for an eventual server deployment.</li><li>Using the platform to support a clinic / facility where a single instance is sufficient.</li></ul><p>If you\'re considering a multi-device deployment of Hospitali Plus, we\'re <a href="https://github.com/HospitalRun/hospitalrun-frontend/issues/1048" target="_blank">working on features</a> that will allow you to "graduate" from this single instance into a traditional cloud / server-based deployment.</p>',
+    standalone_welcome: '<p>Hospitali Plus is a new Hospital Information Management System that greatly simplifies the management of your facility. It is build with Kenyan hospitals in mind and is:</p>  <ul>    <li>Built to provide the most modern hospital information system tools possible to the least resourced environments</li>    <li>Optimized for the one resource we can&apos;t make more of: Your time!</li>    <li>Focused on great user experiences for clinicians, admins, and support staff</li>    <li>Build with the latest and fastest technology</li> </ul> <p>For more information or support please write us an email at support@magnumdigitalke.com or visit our to <a href="http://magnumdigitalke.com/our-digital-services/hospitaliplus/">website</a> or call us on 0721 733354</p>',
     title: 'Welcome to Hospitali Plus!'
   },
   dates: {
@@ -793,7 +793,7 @@ export default {
     country: 'Country',
     cptcode: 'CPT Code',
     creditTo: 'Credit To',
-    currencySymbol: '$',
+    currencySymbol: 'Ksh',
     date: 'Date',
     dateCompleted: 'Date Completed',
     dateOfBirth: 'Date of Birth',
@@ -1336,15 +1336,18 @@ export default {
       patientAddress: 'ADDRESS:',
       patientAge: 'AGE:',
       patientId: 'PATIENT #:',
-      patientName: 'NAME OF PATIENT:',
+      patientName: 'NAME:',
       remarks: 'Remarks:',
-      spacer: '__________________________________________'
+      spacer: '__________________________________________',
+      empty: '--',
+      signhere: '<br>Sign:________________________<br>',
+      indent: '&nbsp;&nbsp;&#9642;&nbsp;&nbsp;'
     },
     messages: { whereConducted: 'were deducted during my confinement' },
     titles: {
       billingStatement: 'BILLING STATEMENT',
       patientMember: 'Patient-Member',
-      patients: "PATIENT'S",
+      patients: "Patient's Invoice",
       relContact: 'Relationship/Contact no.'
     }
   } },

@@ -1,6 +1,6 @@
 /* eslint-disable */
 var config = {
-  couchDbServer: '192.168.0.138',
+  couchDbServer: 'localhost',
   couchDbPort: '5984',
   couchDbUseSsl: false,
   couchDbChangesSince: 'now',
@@ -9,7 +9,7 @@ var config = {
   googleClientId: 'FOR GOOGLE SSO; GOOGLE CLIENT ID GOES HERE',
   googleClientSecret: 'FOR GOOGLE SSO; GOOGLE CLIENT SECRET GOES HERE',
   serverPort: '4200',
-  server: '192.168.0.138',
+  server: 'localhost',
   useGoogleAuth: false,
   useSSL: false,
   imagesdir: '/tmp/patientimages',

@@ -30,6 +30,9 @@ export default AbstractModuleRoute.extend(ModalHelper, PatientListRoute, {
   }, {
     name: 'pricingProfiles',
     findArgs: ['price-profile']
+  }, {
+    name: 'printHeader',
+    findArgs: ['option', 'print_header']
   }],
 
   actions: {

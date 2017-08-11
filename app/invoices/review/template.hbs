@@ -1,11 +1,25 @@
 <div class="panel panel-primary invoices-review">
   <div class="panel-body">
-    <h5 class="text-center">
+    <div class="print-header text-center">
+      {{#if logoURL}}
+        <img src={{logoURL}} class="report-logo">
+      {{/if}}
+      {{#if facilityName }}
+        <h3>{{facilityName}}</h3>
+      {{/if}}
+      {{#if headerLine1}}
+        <span>{{headerLine1}}</span><br>
+      {{/if}}
+      {{#if headerLine2}}
+        <span>{{headerLine2}}</span><br>
+      {{/if}}
+      {{#if headerLine3}}
+        <span>{{headerLine3}}</span><br>
+      {{/if}}
+    </div>
+    <h3 class="text-center">
       {{t "print.invoice.titles.patients"}}
-    </h5>
-    <h5 class="text-center">
-      {{t "print.invoice.titles.billingStatement"}}
-    </h5>
+    </h3>
     <table>
       <tr>
         <td colspan="2" class="col-xs-8">
@@ -16,25 +30,17 @@
         </td>
       </tr>
       <tr>
-        <td class="col-xs-5">
+        <td class="col-xs-4">
           {{t "print.invoice.labels.patientAge"}} {{model.patient.age}}
         </td>
-        <td class="col-xs-3">
+        <td class="col-xs-4">
           {{t "print.invoice.labels.dateAdmitted"}}{{date-format model.visit.startDate}}
         </td>
-        <td class="col-xs-4"></td>
-      </tr>
-      <tr>
-        <td class="col-xs-5"></td>
-        <td class="col-xs-3">{{t "print.invoice.labels.dateDischarged"}}{{date-format model.visit.endDate}}</td>
-        <td class="col-xs-4"></td>
-      </tr>
-      <tr>
-        <td colspan="3" class="col-xs-12">
-          {{t "print.invoice.labels.patientAddress"}} {{model.patient.displayAddress}}
+        <td class="col-xs-4">
+          {{t "print.invoice.labels.dateDischarged"}}{{date-format model.visit.endDate}}
         </td>
       </tr>
-    </table>
+    </table><br>
     <table class="table">
       <tr class="table-header">
         <th>{{t "labels.description"}}</th>
@@ -45,30 +51,39 @@
         <th class="text-right">{{t "labels.excess"}}</th>
       </tr>
       {{#each model.lineItemsByCategory as |categoryGroup|}}
-        <tr>
-          <td colspan="6">
-            <strong>{{categoryGroup.category}}</strong>
-          </td>
-        </tr>
-        {{#each categoryGroup.items as |item|}}
-          <tr>
-            <td>
-              {{item.name}}
-            </td>
-            <td class="text-right">
-              {{number-format item.total}}
-            </td>
-            <td class="text-right">
-              {{number-format item.discount}}
-            </td>
-            <td class="text-right">
-              {{number-format item.nationalInsurance}}
-            </td>
-            <td class="text-right">
-              {{number-format item.privateInsurance}}
-            </td>
-            <td class="text-right">{{number-format item.amountOwed}}</td>
-          </tr>
+        {{#each categoryGroup.items as |item index|}}
+          {{#if item.total}}
+            <tr>
+              <td><strong>{{item.name}}</strong></td>
+              <td class="text-right"><strong>{{number-format item.total}}</strong></td>
+              <td class="text-right"><strong>{{number-format item.discount}}</strong></td>
+              <td class="text-right"><strong>{{number-format item.nationalInsurance}}</strong></td>
+              <td class="text-right"><strong>{{number-format item.privateInsurance}}</strong></td>
+              <td class="text-right"><strong>{{number-format item.amountOwed}}</strong></td>
+            </tr>
+            {{#each item.details as |detail|}}
+              <tr>
+                <td>
+                  {{t 'print.invoice.labels.indent'}} {{detail.name}}
+                </td>
+                <td class="text-right">
+                  {{number-format detail.amountOwed}}
+                </td>
+                <td class="text-right">
+                  {{t 'print.invoice.labels.empty'}}
+                </td>
+                <td class="text-right">
+                  {{t 'print.invoice.labels.empty'}}
+                </td>
+                <td class="text-right">
+                  {{t 'print.invoice.labels.empty'}}
+                </td>
+                <td class="text-right">
+                  {{number-format detail.amountOwed}}
+                </td>
+              </tr>
+            {{/each}}
+          {{/if}}
         {{/each}}
         <tr>
           <td><strong>{{t 'labels.total'}} {{categoryGroup.category}}</strong></td>
@@ -92,7 +107,7 @@
         <td colspan="4"></td>
         <td class="text-right">-{{number-format model.paidTotal}}</td>
         <td></td>
-      </tr>
+      </tr><br>
       <tr>
         <td><strong>{{t 'labels.grandTotal'}}</strong></td>
         <td colspan="4"></td>
@@ -116,24 +131,16 @@
         </tr>
       {{/if}}
       <tr>
-        <td class="col-xs-7"></td>
-        <td class="col-xs-5">{{t 'print.invoice.messages.whereConducted'}}</td>
-      </tr>
-      <tr>
-        <td class="col-xs-8">{{t 'print.invoice.labels.billedBy'}} {{model.modifiedBy}}</td>
-        <td class="col-xs-4">{{t 'print.invoice.labels.spacer'}}</td>
-      </tr>
-      <tr>
-        <td class="col-xs-8">{{t 'print.invoice.labels.billedDate'}} {{date-format model.billDate}}</td>
-        <td class="text-center col-xs-4">{{t 'print.invoice.titles.patientMember'}}</td>
+        <td class="col-xs-8"></td>
+        <td class="col-xs-4">{{t 'print.invoice.labels.billedBy'}} {{model.modifiedBy}}</td>
       </tr>
       <tr>
         <td class="col-xs-8"></td>
-        <td class="col-xs-4">{{t 'print.invoice.labels.spacer'}}</td>
+        <td class="col-xs-4">{{t 'print.invoice.labels.signhere'}}</td>
       </tr>
       <tr>
-        <td class="col-xs-8"></td>
-        <td class="text-center col-xs-4">{{t 'print.invoice.titles.relContact'}}</td>
+        <td class="text-center col-xs-8"></td>
+        <td class="col-xs-4">{{t 'print.invoice.labels.billedDate'}} {{date-format model.billDate}}</td>
       </tr>
     </table>
   </div>

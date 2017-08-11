@@ -224,7 +224,7 @@ export default Adapter.extend(CheckForErrors, {
       if (query.mapReduce) {
         mapReduce = query.mapReduce;
       } else if (query.containsValue) {
-        return this._executeContainsSearch(store, type, query);
+        return this._executePouchDBFind(store, type, query);
       }
       let database = get(this, 'database');
       return new Ember.RSVP.Promise((resolve, reject) => {
