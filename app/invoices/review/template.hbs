@@ -4,9 +4,6 @@
       {{#if logoURL}}
         <img src={{logoURL}} class="report-logo">
       {{/if}}
-      {{#if facilityName }}
-        <h3>{{facilityName}}</h3>
-      {{/if}}
       {{#if headerLine1}}
         <span>{{headerLine1}}</span><br>
       {{/if}}
@@ -85,14 +82,6 @@
             {{/each}}
           {{/if}}
         {{/each}}
-        <tr>
-          <td><strong>{{t 'labels.total'}} {{categoryGroup.category}}</strong></td>
-          <td class="text-right"><strong>{{number-format categoryGroup.total}}</strong></td>
-          <td class="text-right"><strong>{{number-format categoryGroup.discount}}</strong></td>
-          <td class="text-right"><strong>{{number-format categoryGroup.nationalInsurance}}</strong></td>
-          <td class="text-right"><strong>{{number-format categoryGroup.privateInsurance}}</strong></td>
-          <td class="text-right"><strong>{{number-format categoryGroup.amountOwed}}</strong></td>
-        </tr>
       {{/each}}
       <tr>
         <td><strong>{{t 'labels.total'}}</strong></td>
@@ -109,7 +98,7 @@
         <td></td>
       </tr><br>
       <tr>
-        <td><strong>{{t 'labels.grandTotal'}}</strong></td>
+        <td><strong>{{t 'print.invoice.labels.balance'}}</strong></td>
         <td colspan="4"></td>
         <td class="text-right"><strong>{{number-format model.remainingBalance}}</strong></td>
         <td></td>
@@ -137,6 +126,9 @@
       <tr>
         <td class="col-xs-8"></td>
         <td class="col-xs-4">{{t 'print.invoice.labels.signhere'}}</td>
+      </tr>
+      <tr>
+        <td class="col-xs-12"></td>
       </tr>
       <tr>
         <td class="text-center col-xs-8"></td>

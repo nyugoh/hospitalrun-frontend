@@ -18,6 +18,7 @@ export default Ember.Controller.extend({
 
   actions: {
     returnToInvoice() {
+      console.log(this.get('model'));
       this.transitionTo('invoices.edit', this.get('model'));
     }
   }

@@ -1341,7 +1341,8 @@ export default {
       spacer: '__________________________________________',
       empty: '--',
       signhere: '<br>Sign:________________________<br>',
-      indent: '&nbsp;&nbsp;&#9642;&nbsp;&nbsp;'
+      indent: '&nbsp;&nbsp;&#9642;&nbsp;&nbsp;',
+      balance: 'Balance:'
     },
     messages: { whereConducted: 'were deducted during my confinement' },
     titles: {
