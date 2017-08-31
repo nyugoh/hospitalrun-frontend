@@ -6,6 +6,7 @@ import PatientSubmodule from 'hospitalrun/mixins/patient-submodule';
 import PublishStatuses from 'hospitalrun/mixins/publish-statuses';
 import SelectValues from 'hospitalrun/utils/select-values';
 import uuid from 'npm:uuid';
+import config from 'hospitalrun/config/environment';
 
 export default AbstractEditController.extend(NumberFormat, PatientSubmodule, PublishStatuses, {
   invoiceController: Ember.inject.controller('invoices'),
@@ -16,6 +17,9 @@ export default AbstractEditController.extend(NumberFormat, PatientSubmodule, Pub
   supplyCharges: [],
   updateCapability: 'add_invoice',
   wardCharges: [],
+  claimItems: [],
+  cardData: {},
+  copayAmount: 0,
 
   additionalButtons: function() {
     let buttons = [];
@@ -43,6 +47,11 @@ export default AbstractEditController.extend(NumberFormat, PatientSubmodule, Pub
     return this.currentUserCan('add_charge');
   }.property(),
 
+  _finishUpdate(message, title) {
+    this.send('closeModal');
+    this.displayAlert(title, message);
+  },
+
   canAddPayment: function() {
     return this.currentUserCan('add_payment');
   }.property(),
@@ -59,7 +68,105 @@ export default AbstractEditController.extend(NumberFormat, PatientSubmodule, Pub
     }
   }.property('expenseAccountList.value'),
 
+  currentPatient: function() {
+    let type = this.get('model.paymentType');
+    if (type === 'Deposit') {
+      return this.get('model.patient');
+    } else {
+      return this.get('model.invoice.patient');
+    }
+  }.property('model.patient', 'model.paymentType', 'model.invoice.patient'),
+
   actions: {
+    readCard() {
+      let apiPath = `${config.smartAPI}${this.get('model.patient.friendlyId')}`;
+      if (Object.keys(this.cardData).length == 0) {
+        $.ajax({
+          url: apiPath,
+          dataType: 'json',
+          success: (response)=>{
+            if (response == 0) {
+              let message = 'Click forward on Smart to send card information';
+              this.displayAlert('Read card', message);
+            } else if (response == 2) {
+              let message = 'There\'s an invoice been processed for the same patient or claim has already been sent to Smart.';
+              this.displayAlert('Read card', message);
+            } else if (response == 3) {
+              let message = 'Invoice claim was rejected.';
+              this.displayAlert('Read card', message);
+            } else if (response == 4) {
+              let message = 'The invoice has been processed. Finialize and print.';
+              this.displayAlert('Read card', message);
+            } else {
+              this.cardData = response;
+              this.processCard(this.cardData);
+            }
+          }
+        });
+      } else {
+        let message = 'Card has already been read. Click Post to Smart or refresh page.';
+        this.displayAlert('Read Card', message);
+      }
+    },
+
+    sendClaim() {
+      if (Object.keys(this.cardData).length == 0) {
+        let message = 'Read card first';
+        this.displayAlert('Post Status', message);
+      } else {
+        let hospitalClaim = { 'claim': [] };
+        let totalServices = 0;
+        let grossAmount = 0;
+        let diagnoses = [];
+        this.get('model.visit').get('diagnoses').forEach((diagnose)=>{
+          let diag = {
+            diagnosis: diagnose.get('diagnosis')
+          };
+          diagnoses.pushObject(diag);
+        });
+        this.get('model.lineItemsByCategory').forEach((category)=>{
+          grossAmount = category.amountOwed;
+          category.items.forEach((department)=>{
+            department.get('details').forEach((item)=>{
+              totalServices += 1;
+              let service = this.addService(item, totalServices);
+              this.get('claimItems').push(service);
+            });
+          });
+          this.get('claimItems').push(this.addCopayService(totalServices));
+          totalServices += 1;
+        });
+        hospitalClaim.claim.push({ 'Claim_Header': this.setClaimHeader(totalServices, grossAmount, diagnoses) });
+        hospitalClaim.claim.push({ 'Member': this.setMemberInfo() });
+        hospitalClaim.claim.push({ 'Patient': this.parsePatientInfo(this.get('model.patient')) });
+        hospitalClaim.claim.push({ 'Claim_Data': this.setClaimData() });
+        this.postToSmart(hospitalClaim);
+      }
+    },
+
+    getClaimStatus() {
+      let apiPath = `${config.smartAPI}${this.get('model.patient.friendlyId')}`;
+      $.ajax({
+        url: apiPath,
+        dataType: 'json',
+        success: (response)=>{
+          if (response == 0) {
+            let message = 'Click forward on Smart to send card information';
+            this.displayAlert('Read card', message);
+          } else if (response == 2) {
+            let message = 'There\'s an invoice been processed for the same patient or claim has already been sent to Smart.';
+            this.displayAlert('Read card', message);
+          } else if (response == 3) {
+            let message = 'Invoice claim was rejected.';
+            this.displayAlert('Read card', message);
+          } else {
+            let message = 'The invoice has been processed. Finialize and print.';
+            this.displayAlert('Read card', message);
+          }
+        }
+      });
+    },
+
     addItemCharge(lineItem) {
       let details = lineItem.get('details');
       let detail = this.store.createRecord('line-item-detail', {
@@ -160,6 +267,258 @@ export default AbstractEditController.extend(NumberFormat, PatientSubmodule, Pub
     toggleDetails(item) {
       item.toggleProperty('showDetails');
     }
+  },
+
+  addService(item, number) {
+    let date = this.getCurrentDateTime();
+    return { 'service': {
+      'Number': number,
+      'Invoice_Number': this.get('model.id'),
+      'Global_Invoice': this.get('model.id'),
+      'Start_Date': date.date,
+      'Start_Time': date.time,
+      'Provider': {
+        'Role': 'SP',
+        'Practice_Number': 'SKSP_3355'
+      },
+      'Diagnosis': {
+        'Stage': 'P',
+        'Code_Type': 'ICD10',
+        'Code': 'UNKN'
+      },
+      'Encounter_Type': item.get('department'),
+      'Code_Type': 'Internal',
+      'Code': 'UNKN',
+      'Code_Description': item.get('name'),
+      'Quantity': item.get('quantity'),
+      'Total_Amount': `${item.get('price') * item.get('quantity')}`,
+      'Reason': ' '
+    } };
+  },
+
+  addRecord(amount) {
+    let invoice = this.get('model');
+    let patient = invoice.get('patient');
+    let benefits = this.cardData.AdmissionInformation.Benefits.Benefit.Amount.text;
+    let payment = this.store.createRecord('payment', {
+      invoice,
+      paymentType: 'Payment',
+      datePaid: new Date()
+    });
+    payment.set('amount', amount);
+    patient.get('payments').then(function(payments) {
+      payments.pushObject(payment);
+      patient.save().then(function() {
+        invoice.addPayment(payment);
+        payment.save();
+        invoice.save().then(function() {
+          let message = `Card benefits = ${benefits}. Added ${payment.get('amount')} to invoice ${invoice.get('id')}. Copay amount = ${this.copayAmount}`;
+          this._finishUpdate(message, 'Card Payment Added');
+        }.bind(this));
+      }.bind(this));
+    }.bind(this));
+  },
+
+  parsePatientInfo(invoice) {
+    let patient  = {
+      'Dependant': 'Y',
+      'First_Name': invoice.get('firstName'),
+      'Middle_Name': invoice.get('middleName'),
+      'Surname': invoice.get('lastName'),
+      'Date_Of_Birth': ' ',
+      'Gender': invoice.get('sex')
+    };
+    return patient;
+  },
+
+  setClaimData() {
+    let claim = [{ 'Discharge_Notes': 'Diagn' }];
+    claim.push(this.claimItems);
+    return claim;
+  },
+
+  processCard(card) {
+    let benefits = card.AdmissionInformation.Benefits.Benefit.Amount.text;
+    card.AdmissionInformation.PaymentModifiers.PaymentModifier.forEach((modifier)=>{
+      if (modifier.Type.text == 0) {
+        this.copayAmount = parseFloat(modifier.Amount_Required.text);
+      }
+    });
+    let totalAmount = 0;
+    this.get('model.lineItemsByCategory').forEach((category)=>{
+      totalAmount += parseFloat(category.total);
+      if (totalAmount <= this.copayAmount) {
+        totalAmount = parseFloat(category.total);
+      } else {
+        totalAmount = parseFloat(category.total) - this.copayAmount;
+      }
+      if (totalAmount <= benefits) {
+        let message = 'Can be fully settled, add payment';
+        this.displayAlert('Card Status', message);
+        this.addRecord(totalAmount);
+      } else {
+        let balance = this._numberFormat(totalAmount - benefits);
+        let message = `${'Patient needs to pay '} ${balance}`;
+        this.displayAlert('Card Status', message);
+        this.addRecord(benefits);
+      }
+    });
+  },
+
+  postToSmart(hospitalClaim) {
+    let postUrl = `${config.smartAPI}${this.get('model.patient.friendlyId')}`;
+    $.ajax({
+      url: postUrl,
+      type: 'put',
+      cotentType: 'application/json',
+      dataType: 'json',
+      data: {
+        'claim': JSON.stringify(hospitalClaim)
+      },
+      success: (response)=>{
+        console.log('Post response,', response);
+        if (response.flag == 2) {
+          let message = 'Claim has already been posted. Click retrieve on Smart.';
+          this.displayAlert('Post Status', message);
+        } else if (response.flag == 3) {
+          let message = `Error when posting to smart: ${response.error}`;
+          this.displayAlert('Post Status', message);
+          this.get('model.patients').get('payments').forEach((payment)=>{
+            this.removePayment(payment);
+          });
+        } else {
+          let message = 'Posted to Smart successfully.Go ahead and print the invoice.';
+          this.displayAlert('Post Status', message);
+        }
+      }
+    });
+  },
+
+  processModifiers() {
+    let modifierObject = this.cardData.AdmissionInformation.PaymentModifiers.PaymentModifier;
+    console.log(JSON.stringify(modifierObject));
+    let modifier1 = {};
+    let modifier2 = {};
+    modifierObject.forEach((modifier)=>{
+      if (modifier.Type.text == 0) {
+        modifier1 = {
+          'Type': modifier.Type.text,
+          'Amount_Required': modifier.Amount_Required.text,
+          'Receipt': ' '
+        };
+      } else {
+        modifier2 = {
+          'Type': modifier.Type.text,
+          'NHIF_Member_Nr': modifier.NHIF_Member_Nr.text,
+          'NHIF_Contributor_Nr': ' ',
+          'NHIF_Employer_Code': ' ',
+          'NHIF_Site_Nr': ' ',
+          'NHIF_Patient_Relation': ' ',
+          'Diagnosis_Code': ' ',
+          'Admit_Date': ' ',
+          'Discharge_Date': ' ',
+          'Days_Used': ' ',
+          'Amount': ' '
+        };
+      }
+    });
+    return [{ 'PaymentModifier': modifier1 }, { 'PaymentModifier': modifier2 }];
+  },
+
+  setClaimHeader(totalServices, grossAmount) {
+    let provider = {
+      'Role': 'SP',
+      'Country_Code': 'KEN',
+      'Group_Practice_Number': 'SKSP_3355',
+      'Group_Practice_Name': 'Betacare Ngara Clinic'
+    };
+    let authorization = {
+      'Pre_Authorization_Number': 0,
+      'Pre_Authorization_Amount': 0
+    };
+    let date = this.getCurrentDateTime();
+    let header = {
+      'Invoice_Number': this.get('model.id'),
+      'Claim_Date': date.date,
+      'Claim_Time': date.time,
+      'Gross_Amount': grossAmount,
+      'Total_Services': totalServices,
+      'Pool_Number': parseFloat(this.cardData.AdmissionInformation.Benefits.Benefit.Nr.text),
+      'Provider': provider,
+      'Authorization': authorization,
+      'PaymentModifiers': this.processModifiers()
+    };
+    return header;
+  },
+
+  setMemberInfo() {
+    let forwardedCardData = this.cardData.AdmissionInformation;
+    let member = {
+      'Membership_Number': forwardedCardData.B1.medicalaid_number.text,
+      'Scheme_Code': forwardedCardData.B1.medicalaid_code.text,
+      'Scheme_Plan': forwardedCardData.B1.medicalaid_plan.text,
+      'card_serialnumber': forwardedCardData.A1.card_serialnumber.text
+    };
+    return member;
+  },
+
+  getCurrentDateTime() {
+    let months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    let date = new Date();
+    let month = months[date.getMonth()];
+    let day = 0;
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+    if (date.getDate() < 10) {
+      day = months[date.getDate()];
+    } else {
+      day = date.getDate();
+    }
+    if (date.getHours() < 10) {
+      hours = months[date.getHours()];
+    } else {
+      hours = date.getHours();
+    }
+    if (date.getMinutes() < 10) {
+      minutes = months[date.getMinutes()];
+    } else {
+      minutes = date.getMinutes();
+    }
+    if (date.getSeconds() < 10) {
+      seconds = months[date.getSeconds()];
+    } else {
+      seconds = date.getSeconds();
+    }
+    return { 'date': `${date.getFullYear()}-${month}-${day}`, 'time': `${hours}:${minutes}:${seconds}` };
+  },
+
+  addCopayService(totalServices) {
+    let date = this.getCurrentDateTime();
+    let number = totalServices + 1;
+    return { 'service': {
+      'Number': number,
+      'Invoice_Number': this.get('model.id'),
+      'Global_Invoice': this.get('model.id'),
+      'Start_Date': date.date,
+      'Start_Time': date.time,
+      'Provider': {
+        'Role': 'SP',
+        'Practice_Number': 'SKSP_3355'
+      },
+      'Diagnosis': {
+        'Stage': 'P',
+        'Code_Type': 'ICD10',
+        'Code': 'UNKN'
+      },
+      'Encounter_Type': 'COPAY',
+      'Code_Type': 'Internal',
+      'Code': 'UNKN',
+      'Code_Description': 'Copay',
+      'Quantity': 1,
+      'Total_Amount': `-${this.copayAmount}`,
+      'Reason': ' '
+    } };
   },
 
   changePaymentProfile: function() {

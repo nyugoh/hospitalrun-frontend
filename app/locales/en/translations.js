@@ -315,7 +315,10 @@ export default {
       paymentsDeposits: 'Payments made',
       pricingPanelOverrides: 'Pricing profile overrides',
       pricingProfile: 'Pricing Profile',
-      setFee: 'Set Fee'
+      setFee: 'Set Fee',
+      readCard: 'Read Card',
+      sendClaim: 'Post to Smart',
+      claimStatus: 'Claim Status'
     },
     messages: {
       flatFeeMsg: 'There is a flat fee for patient financial responsibility of {{currency}} {{setFee}}.',

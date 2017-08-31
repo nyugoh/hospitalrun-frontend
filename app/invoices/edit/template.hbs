@@ -228,7 +228,12 @@
       <h3 class="panel-title">
         {{t 'labels.payments'}}
         {{#if canAddPayment}}
-          <button class="btn btn-primary align-right" {{action "showAddPayment" model bubbles=false }}><span class="octicon octicon-plus"></span>{{t 'admin.roles.capability.addPayment'}}</button>
+          <span>
+            <button class="btn btn-primary" {{action "readCard" model }}><span class="octicon octicon-credit-card"></span>{{t 'billing.labels.readCard'}}</button>
+            <button class="btn btn-primary" {{action "sendClaim" }}><span class="octicon octicon-cloud-upload"></span>{{t 'billing.labels.sendClaim'}}</button>
+            <button class="btn btn-primary" {{action "getClaimStatus"}}><span class="octicon octicon-checklist"></span>{{t 'billing.labels.claimStatus'}}</button>
+            <button class="btn btn-primary align-right" {{action "showAddPayment" model bubbles=false }}><span class="octicon octicon-plus"></span>{{t 'admin.roles.capability.addPayment'}}</button>
+          </span>
         {{/if}}
       </h3>
     </div>

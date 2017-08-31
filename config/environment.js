@@ -5,6 +5,7 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'hospitalrun',
     environment: environment,
+    smartAPI: 'https://hospitaliplus.com/api/v1/smart/',
     rootURL: process.env.EMBER_CLI_ELECTRON ? null : '/',
     locationType: 'hash', // Using hash location type because it is more friendly for offline.
     EmberENV: {
