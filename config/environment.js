@@ -1,10 +1,9 @@
-/* eslint-env node */
-/* eslint no-var: 0 */
+'use strict';
 
 module.exports = function(environment) {
-  var ENV = {
+  let ENV = {
     modulePrefix: 'hospitalrun',
-    environment: environment,
+    environment,
     smartAPI: 'https://hospitaliplus.com/api/v1/smart/',
     rootURL: process.env.EMBER_CLI_ELECTRON ? null : '/',
     locationType: 'hash', // Using hash location type because it is more friendly for offline.
@@ -34,6 +33,14 @@ module.exports = function(environment) {
     'style-src': "'self' 'unsafe-inline'"
   };
 
+  if (environment === 'development') {
+    // ENV.APP.LOG_RESOLVER = true;
+    // ENV.APP.LOG_ACTIVE_GENERATION = true;
+    // ENV.APP.LOG_TRANSITIONS = true;
+    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+  }
+
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
@@ -43,6 +50,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   ENV.i18n = {

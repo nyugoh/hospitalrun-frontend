@@ -1,16 +1,7 @@
-import Ember from 'ember';
-import { module, test } from 'qunit';
-import startApp from 'hospitalrun/tests/helpers/start-app';
+import { test } from 'qunit';
+import moduleForAcceptance from 'hospitalrun/tests/helpers/module-for-acceptance';
 
-module('Acceptance | invoices', {
-  beforeEach() {
-    this.application = startApp();
-  },
-
-  afterEach() {
-    Ember.run(this.application, 'destroy');
-  }
-});
+moduleForAcceptance('Acceptance | invoices');
 
 test('visiting /invoices', function(assert) {
   runWithPouchDump('billing', function() {
@@ -48,7 +39,7 @@ test('create invoice', function(assert) {
 
 test('print invoice', function(assert) {
   runWithPouchDump('billing', function() {
-    window.print = Ember.K; // Disable browser print dialog.
+    window.print = function() {}; // Disable browser print dialog.
     authenticateUser();
     visit('/invoices');
     andThen(function() {
@@ -207,6 +198,36 @@ test('cashier role', function(assert) {
     click('a:contains(Billing)');
     andThen(function() {
       assert.equal(find('.category-sub-item').length, 2, 'Should have 2 sub navigations');
+    });
+  });
+});
+
+test('Searching invoices', function(assert) {
+  runWithPouchDump('billing', function() {
+    authenticateUser();
+    visit('/invoices');
+
+    fillIn('[role="search"] div input', 'Joe');
+    click('.glyphicon-search');
+
+    andThen(() => {
+      assert.equal(currentURL(), '/invoices/search/Joe', 'Searched for Joe');
+      assert.equal(find('.invoice-number').length, 1, 'There is one search item');
+    });
+
+    fillIn('[role="search"] div input', 'joe');
+    click('.glyphicon-search');
+
+    andThen(() => {
+      assert.equal(currentURL(), '/invoices/search/joe', 'Searched for all lower case joe');
+      assert.equal(find('.invoice-number').length, 1, 'There is one search item');
+    });
+    fillIn('[role="search"] div input', 'ItemNotFound');
+    click('.glyphicon-search');
+
+    andThen(() => {
+      assert.equal(currentURL(), '/invoices/search/ItemNotFound', 'Searched for ItemNotFound');
+      assert.equal(find('.invoice-number').length, 0, 'There is no search result');
     });
   });
 });

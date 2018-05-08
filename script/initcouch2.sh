@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 URL="localhost"
 PORT="5984"
@@ -13,7 +13,7 @@ else
     SECUREHOST="http://$1:$2@$URL:$PORT"
 fi
 
-echo "Setting up security on _users db"
+echo "Setting up security on _user2 db"
 curl -X PUT $SECUREHOST/_users/_security -d '{ "admins": { "names": [], "roles": ["admin"]}, "members": { "names": [], "roles": ["admin"]}}'
 echo "Setting up HospitalRun config DB"
 curl -X PUT $SECUREHOST/config
