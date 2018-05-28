@@ -1,6 +1,6 @@
 /* eslint-disable */
 var config = {
-  couchDbServer: 'localhost',
+  couchDbServer: 'couchdb',
   couchDbPort: '5984',
   couchDbUseSsl: false,
   couchDbChangesSince: 'now',

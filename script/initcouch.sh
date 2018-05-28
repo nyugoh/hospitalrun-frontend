@@ -3,6 +3,8 @@
 URL="localhost"
 PORT="5984"
 
+sleep 10
+
 if [ -z "${1}" ] || [ -z "${2}" ]; then
     HOST="http://$URL:$PORT"
     echo "Setting couchdb admin"
@@ -12,7 +14,7 @@ else
     SECUREHOST="http://$1:$2@$URL:$PORT"
 fi
 
-echo "Setting up security on _user db"
+echo "Setting up security on _users db"
 curl -X PUT $SECUREHOST/_users/_security -d '{ "admins": { "names": [], "roles": ["admin"]}, "members": { "names": [], "roles": ["admin"]}}'
 echo "Setting up HospitalRun config DB"
 curl -X PUT $SECUREHOST/config
