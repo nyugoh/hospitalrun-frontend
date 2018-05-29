@@ -257,7 +257,7 @@ export default Mixin.create({
         }
       ]
     },
-    {
+    /*{
       title: 'Incident',
       iconClass: 'octicon-package',
       route: 'incident',
@@ -289,7 +289,7 @@ export default Mixin.create({
           capability: 'generate_incident_report'
         }
       ]
-    },
+    },*/
     {
       title: 'Administration',
       iconClass: 'octicon-person',
