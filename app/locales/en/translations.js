@@ -426,8 +426,14 @@ export default {
   },
   dashboard: {
     needs_user_setup: 'We recommend that you setup a User account.',
-    standalone_welcome: '<p>Hospitali Plus is a new Hospital Information Management System that greatly simplifies the management of your facility. It is build with Kenyan hospitals in mind and is:</p>  <ul>    <li>Built to provide the most modern hospital information system tools possible to the least resourced environments</li>    <li>Optimized for the one resource we can&apos;t make more of: Your time!</li>    <li>Focused on great user experiences for clinicians, admins, and support staff</li>    <li>Build with the latest and fastest technology</li> </ul> <p>For more information or support please write us an email at support@magnumdigitalke.com or visit our to <a href="http://magnumdigitalke.com/our-digital-services/hospitaliplus/">website</a> or call us on 0721 733354</p>',
-    title: 'Welcome to Hospitali Plus!'
+    standalone_welcome: '<p>Welcome to ConsultPlus!</p>' +
+    '<p>ConsultPlus is a new Consultant Doctor Information Management System that greatly simplifies the management of your patients and consultation clinic. It is build with Kenyan consultant in mind and is:</p>' +
+    '<ul><li>Built to provide the most modern consultant information system tools possible to the least resourced environments</li>' +
+    '<li>Optimized for the one resource we can\'t make more of: Your time!</li>' +
+    '<li>Focused on great user experiences for doctors and support staff</li>' +
+    '<li>Build with the latest and fastest technology</li></ul>' +
+    '<p>For more information or support please write us an email at support@magnumdigitalke.com or call us on 0799941794</p>',
+    title: 'Welcome to Consult Plus!'
   },
   dates: {
     'long': '{{years}} year {{months}} months {{days}} days',
@@ -1083,7 +1089,7 @@ export default {
     } }
   },
   navigation: {
-    about: 'About Hospitali Plus',
+    about: 'About Consult Plus',
     actions: {
       login: 'Login',
       logout: 'Logout',
