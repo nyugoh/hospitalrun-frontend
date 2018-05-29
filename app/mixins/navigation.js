@@ -6,39 +6,6 @@ import { camelize } from '@ember/string';
 export default Mixin.create({
   navItems: [
     {
-      title: 'Inventory',
-      iconClass: 'octicon-package',
-      route: 'inventory',
-      capability: 'inventory',
-      subnav: [
-        {
-          title: 'Requests',
-          iconClass: 'octicon-chevron-right',
-          route: 'inventory.index',
-          capability: 'add_inventory_request'
-        },
-        {
-          title: 'Items',
-          iconClass: 'octicon-chevron-right',
-          route: 'inventory.listing',
-          capability: 'inventory'
-        },
-        {
-          title: 'Inventory Received',
-          iconClass: 'octicon-plus',
-          route: 'inventory.batch',
-          subroute: 'new',
-          capability: 'add_inventory_item'
-        },
-        {
-          title: 'Reports',
-          iconClass: 'octicon-chevron-right',
-          route: 'inventory.reports',
-          capability: 'inventory'
-        }
-      ]
-    },
-    {
       title: 'Patients',
       iconClass: 'octicon-organization',
       route: 'patients',
@@ -254,6 +221,39 @@ export default Mixin.create({
           iconClass: 'octicon-chevron-right',
           route: 'pricing.profiles',
           capability: 'pricing'
+        }
+      ]
+    },
+    {
+      title: 'Inventory',
+      iconClass: 'octicon-package',
+      route: 'inventory',
+      capability: 'inventory',
+      subnav: [
+        {
+          title: 'Requests',
+          iconClass: 'octicon-chevron-right',
+          route: 'inventory.index',
+          capability: 'add_inventory_request'
+        },
+        {
+          title: 'Items',
+          iconClass: 'octicon-chevron-right',
+          route: 'inventory.listing',
+          capability: 'inventory'
+        },
+        {
+          title: 'Inventory Received',
+          iconClass: 'octicon-plus',
+          route: 'inventory.batch',
+          subroute: 'new',
+          capability: 'add_inventory_item'
+        },
+        {
+          title: 'Reports',
+          iconClass: 'octicon-chevron-right',
+          route: 'inventory.reports',
+          capability: 'inventory'
         }
       ]
     },
