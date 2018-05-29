@@ -19,7 +19,8 @@
     "electron-test": "ember electron:test",
     "translation-sync": "babel-node script/translation/sync.js --presets es2015 && eslint --fix app/locales",
     "stylelint": "stylelint 'app/styles/**/*.scss'",
-    "electron-run": "ember electron:run"
+    "electron-run": "ember electron",
+    "electron-package": "ember electron:package"
   },
   "repository": {
     "type": "git",
