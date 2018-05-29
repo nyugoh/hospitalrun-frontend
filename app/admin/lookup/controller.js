@@ -99,13 +99,13 @@ export default Controller.extend(BillingCategories, EKMixin,
             'locationsAffected' // Special use case that we need to handle
           ]
         }
-      }, {
+      }, /*{
         name: this.get('i18n').t('admin.lookup.incidentDepartments'),
         value: 'incident_departments',
         models: {
           incident: 'department'
         }
-      }, {
+      },*/ {
         defaultValues: 'defaultInventoryTypes',
         name: this.get('i18n').t('admin.lookup.inventoryTypes'),
         value: 'inventory_types',

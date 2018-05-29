@@ -308,12 +308,12 @@ export default Mixin.create({
           route: 'admin.custom-forms',
           capability: 'update_config'
         },
-        {
+        /*{
           title: 'Incident Categories',
           iconClass: 'octicon-chevron-right',
           route: 'inc-category',
           capability: 'add_incident_category'
-        },
+        },*/
         {
           title: 'Load DB',
           iconClass: 'octicon-plus',
