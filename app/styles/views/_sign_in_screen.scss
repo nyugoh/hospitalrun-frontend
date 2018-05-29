@@ -7,9 +7,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-image: url('images/seth-doyle-78210.jpg');
-  background-repeat: none;
-  background-position: center;
+  background: url('images/seth-doyle-78210.jpg') center ;
   background-size: cover;
   width: 100%;
   height: 100%;
@@ -17,7 +15,6 @@
 
 .signin-logo {
   margin: 40px auto;
-  max-width: 200px;
 }
 
 .form-signin {

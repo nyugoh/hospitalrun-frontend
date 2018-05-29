@@ -426,14 +426,14 @@ export default {
   },
   dashboard: {
     needs_user_setup: 'We recommend that you setup a User account.',
-    standalone_welcome: '<p>Welcome to ConsultPlus!</p>' +
+    standalone_welcome: '<p>Welcome to Consult Plus !</p>' +
     '<p>ConsultPlus is a new Consultant Doctor Information Management System that greatly simplifies the management of your patients and consultation clinic. It is build with Kenyan consultant in mind and is:</p>' +
     '<ul><li>Built to provide the most modern consultant information system tools possible to the least resourced environments</li>' +
     '<li>Optimized for the one resource we can\'t make more of: Your time!</li>' +
     '<li>Focused on great user experiences for doctors and support staff</li>' +
     '<li>Build with the latest and fastest technology</li></ul>' +
     '<p>For more information or support please write us an email at support@magnumdigitalke.com or call us on 0799941794</p>',
-    title: 'Welcome to Consult Plus!'
+    title: 'Welcome to Consult Plus'
   },
   dates: {
     'long': '{{years}} year {{months}} months {{days}} days',
