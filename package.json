@@ -19,7 +19,9 @@
     "electron-test": "ember electron:test",
     "translation-sync": "babel-node script/translation/sync.js --presets es2015 && eslint --fix app/locales",
     "stylelint": "stylelint 'app/styles/**/*.scss'",
-    "electron-run": "ember electron:run"
+    "electron-run": "ember electron:run",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -111,7 +113,8 @@
     "electron-compile": "^6.4.2",
     "electron-localshortcut": "^3.0.4",
     "electron-protocol-serve": "^1.3.0",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "snyk": "^1.123.0"
   },
   "ember-addon": {
     "paths": [
@@ -120,5 +123,6 @@
   },
   "config": {
     "forge": "./ember-electron/electron-forge-config.js"
-  }
+  },
+  "snyk": true
 }
